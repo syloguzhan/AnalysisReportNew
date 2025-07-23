@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: "UICard"
+  name: "UICard",
 };
-</script> 
+</script>

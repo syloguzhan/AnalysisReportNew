@@ -19,62 +19,65 @@
 </template>
 
 <script>
-import ReportResult from '@/components/ui/ReportResult.vue'
-import axios from 'axios'
+import ReportResult from "@/components/ui/ReportResult.vue";
+import axios from "axios";
 
 export default {
-    name: 'ReportView',
-    components: { ReportResult },
-    // ✅ props ile domain geliyor
-    props: {
-      domain: { type: String, default: '' }
-    },
-  
-    data() {
-      return {
-        summary: '',
-        competitors: [],
-        company: null,
-        socialMedia: [],
-        aiAnalysis: [],
-        loaded: false,
-        error: null
-      }
-    },
+  name: "ReportView",
+  components: { ReportResult },
 
+  props: {
+    domain: { type: String, default: "" },
+  },
+
+  data() {
+    return {
+      summary: "",
+      competitors: [],
+      company: null,
+      socialMedia: [],
+      aiAnalysis: [],
+      loaded: false,
+      error: null
+    };
+  },
 
   async created() {
-    console.log("Gelen domain:", this.domain)
-    await this.fetchReportData()
-},
+    console.log("Gelen domain:", this.domain);
+    await this.fetchReportData();
+  },
 
-      methods: {
-        async fetchReportData() {
+  methods: {
+    async fetchReportData() {
       this.loaded = false;
       this.error = null;
       try {
-        const response = await axios.post('http://127.0.0.1:5000/generate-reports', {
-          domain: this.domain
-        });
+        const response = await axios.post(
+          "http://127.0.0.1:5000/generate-reports",
+          {
+            domain: this.domain,
+          }
+        );
         const data = response.data;
-        this.summary = data.report || '';
+        this.summary = data.report || "";
         this.loaded = true;
       } catch (err) {
-        this.error = 'Veri alınırken hata oluştu.';
+        this.error = "Veri alınırken hata oluştu.";
         this.loaded = false;
       }
     },
     goHome() {
-      this.$router.push({ name: 'input' })
-    }
-  }
-}
+      this.$router.push({ name: "input" });
+    },
+  },
+};
 </script>
 
 <style scoped>
 .report-view {
   min-height: 100vh;
-  background: url('@/assets/radar-bg.jpg') center center/cover no-repeat, #0a1622;
+  background: url("@/assets/radar-bg.jpg") center center/cover no-repeat,
+    #0a1622;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -90,7 +93,7 @@ export default {
   width: 100%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   color: #f1f1f1;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 .loading {

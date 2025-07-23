@@ -1,7 +1,13 @@
 <template>
   <div class="custom-input">
     <label :for="id">{{ label }}</label>
-    <input :id="id" :type="type" :placeholder="placeholder" :value="value" @input="$emit('input', $event.target.value)" />
+    <input
+      :id="id"
+      :type="type"
+      :placeholder="placeholder"
+      :value="value"
+      @input="$emit('input', $event.target.value)"
+    />
   </div>
 </template>
 
@@ -14,9 +20,9 @@ export default {
     value: String,
     type: {
       type: String,
-      default: "text"
+      default: "text",
     },
-    placeholder: String
-  }
+    placeholder: String,
+  },
 };
-</script> 
+</script>

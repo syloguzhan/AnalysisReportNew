@@ -18,11 +18,11 @@ const routes = [
     component: HistoryView,
   },
   {
-    path: '/report/:domain',
-    name: 'Report',
+    path: "/report/:domain",
+    name: "Report",
     component: ReportView,
-    props: true
-  }
+    props: true,
+  },
 ];
 
 const router = new VueRouter({

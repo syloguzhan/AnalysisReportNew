@@ -7,17 +7,28 @@
         </button>
         <div v-else class="pdf-loading-text">Yükleniyor...</div>
       </div>
-      <h2><span class="icon">📄</span> Analiz Sonuçları: <span class="domain">{{ domain }}</span></h2>
+      <h2>
+        <span class="icon">📄</span> Analiz Sonuçları:
+        <span class="domain">{{ domain }}</span>
+      </h2>
 
       <!-- Şirket Bilgileri Bölümü -->
       <section class="company-info" v-if="company">
         <h3><span class="icon">🏢</span> Şirket Bilgileri</h3>
         <div class="info-box">
           <p><strong>Adı:</strong> {{ company.name }}</p>
-          <p v-if="company.sector"><strong>Sektör:</strong> {{ company.sector }}</p>
-          <p v-if="company.size"><strong>Çalışan:</strong> {{ company.size }}</p>
-          <p v-if="company.founded"><strong>Kuruluş:</strong> {{ company.founded }}</p>
-          <p v-if="company.description"><strong>Açıklama:</strong> {{ company.description }}</p>
+          <p v-if="company.sector">
+            <strong>Sektör:</strong> {{ company.sector }}
+          </p>
+          <p v-if="company.size">
+            <strong>Çalışan:</strong> {{ company.size }}
+          </p>
+          <p v-if="company.founded">
+            <strong>Kuruluş:</strong> {{ company.founded }}
+          </p>
+          <p v-if="company.description">
+            <strong>Açıklama:</strong> {{ company.description }}
+          </p>
         </div>
       </section>
 
@@ -71,16 +82,23 @@
           <table>
             <thead>
               <tr>
-                <th>Firma</th><th>İçerik</th><th>AI Skoru</th><th>Konular</th>
+                <th>Firma</th>
+                <th>İçerik</th>
+                <th>AI Skoru</th>
+                <th>Konular</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="c in competitors" :key="c.name">
                 <td>{{ c.name }}</td>
                 <td>{{ c.contentCount }}</td>
-                <td><span class="score">{{ c.score }}</span></td>
                 <td>
-                  <span v-for="t in c.topics" :key="t" class="topic-chip">{{ t }}</span>
+                  <span class="score">{{ c.score }}</span>
+                </td>
+                <td>
+                  <span v-for="t in c.topics" :key="t" class="topic-chip">{{
+                    t
+                  }}</span>
                 </td>
               </tr>
             </tbody>
@@ -92,52 +110,52 @@
 </template>
 
 <script>
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export default {
-  name: 'ReportResult',
+  name: "ReportResult",
   props: {
-    domain:   { type: String, required: true },
-    summary:  { type: String, required: true },
-    competitors: { type: Array,  default: () => [] },
+    domain: { type: String, required: true },
+    summary: { type: String, required: true },
+    competitors: { type: Array, default: () => [] },
     company: { type: Object, default: null },
     socialMedia: { type: Array, default: () => [] },
-    aiAnalysis: { type: Array, default: () => [] }
+    aiAnalysis: { type: Array, default: () => [] },
   },
   data() {
     return {
-      pdfLoading: false
-    }
+      pdfLoading: false,
+    };
   },
   methods: {
     async downloadPDF() {
-      this.pdfLoading = true
-      document.body.style.cursor = 'wait'
+      this.pdfLoading = true;
+      document.body.style.cursor = "wait";
       try {
-        const el = this.$refs.pdfContent
+        const el = this.$refs.pdfContent;
         // PDF için özel stil uygula
-        el.classList.add('pdf-export')
-        await this.$nextTick()
-        const canvas = await html2canvas(el, { scale: 2 })
-        const imgData = canvas.toDataURL('image/png')
-        const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' })
-        const pageWidth = pdf.internal.pageSize.getWidth()
-        const pageHeight = pdf.internal.pageSize.getHeight()
+        el.classList.add("pdf-export");
+        await this.$nextTick();
+        const canvas = await html2canvas(el, { scale: 2 });
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
         // Görüntüyü sayfaya sığdır
-        const imgWidth = pageWidth - 40
-        const imgHeight = canvas.height * imgWidth / canvas.width
-        pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight)
-        pdf.save(`${this.domain}.rapor.pdf`)
+        const imgWidth = pageWidth - 40;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, "PNG", 20, 20, imgWidth, imgHeight);
+        pdf.save(`${this.domain}.rapor.pdf`);
       } finally {
         // PDF stili kaldır
-        this.$refs.pdfContent.classList.remove('pdf-export')
-        this.pdfLoading = false
-        document.body.style.cursor = ''
+        this.$refs.pdfContent.classList.remove("pdf-export");
+        this.pdfLoading = false;
+        document.body.style.cursor = "";
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -145,7 +163,6 @@ export default {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 1rem;
-  
 }
 .pdf-btn {
   background: var(--accent);
@@ -175,17 +192,52 @@ export default {
   margin-right: 8px;
 }
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-.report-result { padding:2rem; }
-.summary-box   { padding:1rem; border-left:5px solid #4CAF50; margin-bottom:2rem; }
-.info-box      { padding:1rem; border-left:5px solid #2196F3; margin-bottom:2rem; }
-.social-list   { list-style:none; padding:0; margin:0 0 2rem 0; }
-.social-list li { margin-bottom: 8px; }
-table          { width:100%; border-collapse:collapse; }
-th,td          { padding:.75rem; border:1px solid #ccc; text-align:left; }
-.topic-chip    { background:#e3e3fa; color:#222; border-radius:12px; padding:2px 10px; margin-right:4px; font-size:0.95em; }
+.report-result {
+  padding: 2rem;
+}
+.summary-box {
+  padding: 1rem;
+  border-left: 5px solid #4caf50;
+  margin-bottom: 2rem;
+}
+.info-box {
+  padding: 1rem;
+  border-left: 5px solid #2196f3;
+  margin-bottom: 2rem;
+}
+.social-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+.social-list li {
+  margin-bottom: 8px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+.topic-chip {
+  background: #e3e3fa;
+  color: #222;
+  border-radius: 12px;
+  padding: 2px 10px;
+  margin-right: 4px;
+  font-size: 0.95em;
+}
 .result-card.pdf-export {
   background: #fff !important;
   color: #111 !important;

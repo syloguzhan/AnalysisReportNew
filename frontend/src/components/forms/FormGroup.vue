@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: "FormGroup"
+  name: "FormGroup",
 };
-</script> 
+</script>

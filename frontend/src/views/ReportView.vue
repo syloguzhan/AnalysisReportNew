@@ -38,7 +38,7 @@ export default {
       socialMedia: [],
       aiAnalysis: [],
       loaded: false,
-      error: null
+      error: null,
     };
   },
 

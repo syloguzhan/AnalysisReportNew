@@ -10,8 +10,8 @@ import Navbar from "@/components/ui/Navbar.vue";
 export default {
   name: "App",
   components: {
-    Navbar,
-  },
+    Navbar
+  }
 };
 </script>
 
@@ -46,7 +46,7 @@ body {
   background: var(--primary);
   padding: 24px 0;
   margin-bottom: 32px;
-  box-shadow: 0 2px 8px rgba(45, 58, 75, 0.07);
+  box-shadow: 0 2px 8px rgba(45,58,75,0.07);
 }
 
 .navbar a {
@@ -64,14 +64,13 @@ body {
 .ui-card {
   background: var(--surface);
   border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(45, 58, 75, 0.08);
+  box-shadow: 0 2px 12px rgba(45,58,75,0.08);
   padding: 24px;
   margin: 24px auto;
   max-width: 500px;
 }
 
-button,
-.ui-button {
+button, .ui-button {
   background: var(--accent);
   color: var(--surface);
   border: none;
@@ -82,13 +81,11 @@ button,
   cursor: pointer;
   transition: background 0.2s;
 }
-button:hover,
-.ui-button:hover {
-  background: rgb(8, 0, 127);
+button:hover, .ui-button:hover {
+  background:rgb(8, 0, 127);
 }
 
-input,
-.custom-input input {
+input, .custom-input input {
   background: var(--input-bg);
   border: 1.5px solid var(--input-border);
   border-radius: 6px;
@@ -101,8 +98,7 @@ input,
   width: 100%;
   box-sizing: border-box;
 }
-input:focus,
-.custom-input input:focus {
+input:focus, .custom-input input:focus {
   border-color: var(--input-focus);
   box-shadow: 0 0 0 2px #ef835455;
 }
@@ -119,11 +115,8 @@ input:focus,
 
 .ui-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(45, 58, 75, 0.25);
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(45,58,75,0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,6 +127,6 @@ input:focus,
   border-radius: 10px;
   padding: 32px 24px;
   min-width: 320px;
-  box-shadow: 0 4px 24px rgba(45, 58, 75, 0.15);
+  box-shadow: 0 4px 24px rgba(45,58,75,0.15);
 }
 </style>

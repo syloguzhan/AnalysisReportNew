@@ -2,7 +2,7 @@
   <div class="report-view">
     <div v-if="error" class="error-message">
       {{ error }}
-      <button class="back-btn" @click="goHome">Geri Dönmeee</button>
+      <button class="back-btn" @click="goHome">Geri Dön</button>
     </div>
     <div v-else-if="loaded" class="report-container">
       <ReportResult
@@ -14,17 +14,21 @@
         :aiAnalysis="aiAnalysis"
       />
     </div>
-    <div v-else class="loading">AI analiz hazırlanıyor…</div>
+    <div v-else class="loading">
+  <AiMascot />
+</div>
+
   </div>
 </template>
 
 <script>
 import ReportResult from "@/components/ui/ReportResult.vue";
 import axios from "axios";
+import AiMascot from "@/components/ui/AiMascot.vue";
 
 export default {
   name: "ReportView",
-  components: { ReportResult },
+  components: { ReportResult, AiMascot },
 
   props: {
     domain: { type: String, default: "" },
@@ -38,11 +42,11 @@ export default {
       socialMedia: [],
       aiAnalysis: [],
       loaded: false,
-      error: null,
+      error: null
     };
   },
 
-  async created() {
+  async created() { 
     console.log("Gelen domain:", this.domain);
     await this.fetchReportData();
   },

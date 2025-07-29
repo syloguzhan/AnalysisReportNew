@@ -1,13 +1,13 @@
 <template>
   <nav class="navbar radar-navbar">
-    <router-link to="/">Domain Giriş</router-link> |
-    <router-link to="/history">Geçmiş</router-link>
+    <router-link to="/">Domain login</router-link> |
+    <router-link to="/history">History</router-link>
   </nav>
 </template>
 
 <script>
 export default {
-  name: "Navbar",
+  name: "Navbar"
 };
 </script>
 
@@ -18,7 +18,7 @@ export default {
   top: 0;
   left: 0;
   z-index: 100;
-  background: rgba(0, 0, 0, 0);
+  background: rgba(0,0,0,0);
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 24px #000a, 0 1.5px 0 #ff3c3c44 inset;
   border-bottom: 2px solid #ff3c3c33;
@@ -43,4 +43,4 @@ export default {
   color: #ff3c3c;
   border-bottom: 2px solid #ff3c3c;
 }
-</style>
+</style> 

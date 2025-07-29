@@ -2,7 +2,7 @@
   <div class="report-view">
     <div v-if="error" class="error-message">
       {{ error }}
-      <button class="back-btn" @click="goHome">Geri Dön</button>
+      <button class="back-btn" @click="goHome">Geri Dönmeee</button>
     </div>
     <div v-else-if="loaded" class="report-container">
       <ReportResult

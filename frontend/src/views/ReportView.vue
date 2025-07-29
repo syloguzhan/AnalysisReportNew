@@ -4,27 +4,25 @@
       {{ error }}
       <button class="back-btn" @click="goHome">Geri Dön</button>
     </div>
+
     <div v-else-if="loaded" class="report-container">
       <ReportResult
         :domain="domain"
-        :summary="summary"
+        :mainReport="mainReport"
         :competitors="competitors"
-        :company="company"
-        :socialMedia="socialMedia"
-        :aiAnalysis="aiAnalysis"
       />
     </div>
-    <div v-else class="loading">
-  <AiMascot />
-</div>
 
+    <div v-else class="loading">
+      <AiMascot />
+    </div>
   </div>
 </template>
 
 <script>
 import ReportResult from "@/components/ui/ReportResult.vue";
-import axios from "axios";
 import AiMascot from "@/components/ui/AiMascot.vue";
+import axios from "axios";
 
 export default {
   name: "ReportView",
@@ -36,17 +34,14 @@ export default {
 
   data() {
     return {
-      summary: "",
-      competitors: [],
-      company: null,
-      socialMedia: [],
-      aiAnalysis: [],
+      mainReport: null,       // 👈 backend'ten gelen ana firma verisi
+      competitors: [],        // 👈 rakip firmalar
       loaded: false,
-      error: null
+      error: null,
     };
   },
 
-  async created() { 
+  async created() {
     console.log("Gelen domain:", this.domain);
     await this.fetchReportData();
   },
@@ -58,24 +53,33 @@ export default {
       try {
         const response = await axios.post(
           "http://127.0.0.1:5000/generate-reports",
+          { domain: this.domain },
           {
-            domain: this.domain,
+            headers: {
+              "Content-Type": "application/json",
+            }
           }
         );
+
         const data = response.data;
-        this.summary = data.report || "";
+
+        this.mainReport = data.main_report || {};
+        this.competitors = data.competitors || [];
+
         this.loaded = true;
       } catch (err) {
         this.error = "Veri alınırken hata oluştu.";
         this.loaded = false;
       }
     },
+
     goHome() {
       this.$router.push({ name: "input" });
     },
   },
 };
 </script>
+
 
 <style scoped>
 .report-view {

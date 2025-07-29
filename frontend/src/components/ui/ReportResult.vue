@@ -7,8 +7,31 @@
         </button>
         <div v-else class="pdf-loading-text">Yükleniyor...</div>
       </div>
+
       <h2><span class="icon">📄</span> Analiz Sonuçları: <span class="domain">{{ domain }}</span></h2>
 
+      <!-- ✅ Yeni Ana Rapor Bölümü -->
+      <section class="main-report" v-if="mainReport">
+        <h3><span class="icon">🧠</span> Firma Analizi</h3>
+        <div v-for="(content, title) in mainReport" :key="title" class="info-box">
+          <h4>{{ title }}</h4>
+          <p>{{ content }}</p>
+        </div>
+      </section>
+
+      <!-- ✅ Yeni Rakip Firma Bölümü -->
+      <section class="competitor-report" v-if="competitors && competitors.length">
+        <h3><span class="icon">🏁</span> Rakip Firma Analizleri</h3>
+        <div v-for="comp in competitors" :key="comp.competitor_domain" class="info-box">
+          <h4>{{ comp.competitor_domain }}</h4>
+          <div v-for="(content, title) in comp.sections" :key="title" style="margin-bottom: 1rem;">
+            <strong>{{ title }}</strong>
+            <p>{{ content }}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 🔽 Mevcut Kodların Tamamı (dokunulmadı) -->
       <!-- Şirket Bilgileri Bölümü -->
       <section class="company-info" v-if="company">
         <h3><span class="icon">🏢</span> Şirket Bilgileri</h3>
@@ -56,37 +79,8 @@
         </div>
       </section>
 
-      <!-- AI Özet Kutusu -->
-      <section class="ai-summary">
-        <h3><span class="icon">🧠</span> Özet Rapor</h3>
-        <div class="summary-box">
-          <p>{{ summary }}</p>
-        </div>
-      </section>
+     
 
-      <!-- Rakip Karşılaştırma Tablosu -->
-      <section class="comparison-table" v-if="competitors.length">
-        <h3><span class="icon">📊</span> Rakip Karşılaştırması</h3>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Firma</th><th>İçerik</th><th>AI Skoru</th><th>Konular</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="c in competitors" :key="c.name">
-                <td>{{ c.name }}</td>
-                <td>{{ c.contentCount }}</td>
-                <td><span class="score">{{ c.score }}</span></td>
-                <td>
-                  <span v-for="t in c.topics" :key="t" class="topic-chip">{{ t }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
     </div>
   </div>
 </template>
@@ -98,12 +92,13 @@ import html2canvas from 'html2canvas'
 export default {
   name: 'ReportResult',
   props: {
-    domain:   { type: String, required: true },
-    summary:  { type: String, required: true },
-    competitors: { type: Array,  default: () => [] },
-    company: { type: Object, default: null },
-    socialMedia: { type: Array, default: () => [] },
-    aiAnalysis: { type: Array, default: () => [] }
+    domain:        { type: String, required: true },
+    mainReport:    { type: Object,  default: () => ({}) },     // ✅ eklendi
+    competitors:   { type: Array,   default: () => [] },
+    summary:       { type: String, default: "" },
+    company:       { type: Object, default: null },
+    socialMedia:   { type: Array,  default: () => [] },
+    aiAnalysis:    { type: Array,  default: () => [] }
   },
   data() {
     return {
@@ -116,22 +111,18 @@ export default {
       document.body.style.cursor = 'wait'
       try {
         const el = this.$refs.pdfContent
-        // PDF için özel stil uygula
         el.classList.add('pdf-export')
         await this.$nextTick()
         const canvas = await html2canvas(el, { scale: 2 })
         const imgData = canvas.toDataURL('image/png')
         const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' })
         const pageWidth = pdf.internal.pageSize.getWidth()
-        const pageHeight = pdf.internal.pageSize.getHeight()
-        // Görüntüyü sayfaya sığdır
         const imgWidth = pageWidth - 40
         const imgHeight = canvas.height * imgWidth / canvas.width
         pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight)
         pdf.save(`${this.domain}.rapor.pdf`)
       } finally {
-        // PDF stili kaldır
-        this.$refs.pdfContent.classList.remove('pdf-export')
+        el.classList.remove('pdf-export')
         this.pdfLoading = false
         document.body.style.cursor = ''
       }
@@ -139,6 +130,8 @@ export default {
   }
 }
 </script>
+
+
 
 <style scoped>
 .pdf-btn-row {

@@ -29,7 +29,10 @@ def init_driver():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36")
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+
+    # Otomatik değil, manuel olarak doğru yolu veriyoruz:
+    service = ChromeService(executable_path="/usr/local/bin/chromedriver")
+    driver = webdriver.Chrome(service=service, options=chrome_options)
     return driver
 
 def find_social_media_links(html):

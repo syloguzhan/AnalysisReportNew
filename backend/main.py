@@ -133,7 +133,7 @@ def analyze_section_for_domain(domain_name, text_content, section_title, section
     prompt = f"""
     Below are contents from the website {domain_name}.
     SOCIAL MEDIA:
-    {social_links_text}
+    {social_links_text} 
 
     WEBSITE CONTENT:
     {text_content}
@@ -171,17 +171,29 @@ def generate_report():
 
     formal_instructions = "Please respond with a formal,  coherent , essay-style paragraph instead of markdown or list format"
     sections = {
-        "Key Topics and Industry Focus": "Analyze the key topics and industry focuses of the company based on the content." + formal_instructions,
-        "Main Customer Segments": "Identify the main customer segments this company targets." + formal_instructions,
-        "Business Model and Revenue Strategy": "Explain the company's business model and revenue generation strategy." + formal_instructions,
-        "Technological Innovations": "Analyze the technological innovations or digital tools the company utilizes." + formal_instructions,
-        "Brand Strength and Public Image": "Evaluate brand strength and public image via its website or media presence." + formal_instructions,
-        "Partnerships or Collaborations": "Highlight any major partnerships or collaborations that provide a strategic edge." + formal_instructions,
-        "Ethical and Sustainable Practices": "Assess whether the company follows sustainable or ethical business practices." + formal_instructions,
-        "Geographical Presence": "Explore the geographical presence and whether it serves local or global markets." + formal_instructions,
-        "Management Team Expertise": "Comment briefly on the management team's visibility or expertise." + formal_instructions,
-        "SWOT Summary": "Provide a SWOT-style summary to identify key strengths, weaknesses, opportunities, and threats." + formal_instructions,
-        "Weekly Activity Summary" : "Provide a concise summary of what this company has done or announced in the past week." + formal_instructions,
+        "Company Overview & Strategy": (
+                "Analyze the company's key topics and industry focus, main customer segments, "
+                "business model, revenue strategy, and any notable partnerships or collaborations. "
+                + formal_instructions
+        ),
+        "Technology & Practices": (
+                "Examine the company's use of technological innovations, digital tools, "
+                "as well as its ethical and sustainable practices. "
+                + formal_instructions
+        ),
+        "Reputation & Team": (
+                "Evaluate the company's brand strength and public image, its geographical presence, "
+                "and comment on the management team’s visibility or expertise. "
+                + formal_instructions
+        ),
+        "SWOT Summary": (
+                "Provide a SWOT-style summary to highlight key strengths, weaknesses, opportunities, and threats. "
+                + formal_instructions
+        ),
+        "Weekly Activity Summary": (
+                "Provide a concise summary of what this company has done or announced in the past week. "
+                + formal_instructions
+        ),
     }
 
     main_report = {}
@@ -207,9 +219,9 @@ def generate_report():
 
 
     return jsonify({
-        "competitors": competitors_report,
         "main_domain": domain,
         "main_report": main_report,
+        "competitors": competitors_report,
     }), 200
 
 if __name__ == '__main__':

@@ -3,16 +3,16 @@
     <div class="result-card" ref="pdfContent">
       <div class="pdf-btn-row">
         <button v-if="!pdfLoading" class="pdf-btn" @click="downloadPDF">
-          <span>PDF Oluştur</span>
+          <span>Create PDF</span>
         </button>
-        <div v-else class="pdf-loading-text">Yükleniyor...</div>
+        <div v-else class="pdf-loading-text">Loading...</div>
       </div>
 
-      <h2><span class="icon">📄</span> Analiz Sonuçları: <span class="domain">{{ domain }}</span></h2>
+      <h2><span class="icon">📄</span> Analysis Results: <span class="domain">{{ domain }}</span></h2>
 
       <!-- ✅ Yeni Ana Rapor Bölümü -->
       <section class="main-report" v-if="mainReport">
-        <h3><span class="icon">🧠</span> Firma Analizi</h3>
+        <h3><span class="icon">🧠</span> Company Analysis</h3>
         <div v-for="(content, title) in mainReport" :key="title" class="info-box">
           <h4>{{ title }}</h4>
           <p>{{ content }}</p>
@@ -21,7 +21,7 @@
 
       <!-- ✅ Yeni Rakip Firma Bölümü -->
       <section class="competitor-report" v-if="competitors && competitors.length">
-        <h3><span class="icon">🏁</span> Rakip Firma Analizleri</h3>
+        <h3><span class="icon">🏁</span> Competitor Company Analysis</h3>
         <div v-for="comp in competitors" :key="comp.competitor_domain" class="info-box">
           <h4>{{ comp.competitor_domain }}</h4>
           <div v-for="(content, title) in comp.sections" :key="title" style="margin-bottom: 1rem;">
@@ -34,38 +34,38 @@
       <!-- 🔽 Mevcut Kodların Tamamı (dokunulmadı) -->
       <!-- Şirket Bilgileri Bölümü -->
       <section class="company-info" v-if="company">
-        <h3><span class="icon">🏢</span> Şirket Bilgileri</h3>
+        <h3><span class="icon">🏢</span> Company Information</h3>
         <div class="info-box">
-          <p><strong>Adı:</strong> {{ company.name }}</p>
-          <p v-if="company.sector"><strong>Sektör:</strong> {{ company.sector }}</p>
-          <p v-if="company.size"><strong>Çalışan:</strong> {{ company.size }}</p>
-          <p v-if="company.founded"><strong>Kuruluş:</strong> {{ company.founded }}</p>
-          <p v-if="company.description"><strong>Açıklama:</strong> {{ company.description }}</p>
+          <p><strong>Name:</strong> {{ company.name }}</p>
+          <p v-if="company.sector"><strong>Sector:</strong> {{ company.sector }}</p>
+          <p v-if="company.size"><strong>Worker:</strong> {{ company.size }}</p>
+          <p v-if="company.founded"><strong>Establishment:</strong> {{ company.founded }}</p>
+          <p v-if="company.description"><strong>Explanation:</strong> {{ company.description }}</p>
         </div>
       </section>
 
       <!-- Sosyal Medya Varlıkları Bölümü -->
       <section class="social-media" v-if="socialMedia && socialMedia.length">
-        <h3><span class="icon">🌐</span> Sosyal Medya Varlıkları</h3>
+        <h3><span class="icon">🌐</span> Social Media Assets</h3>
         <ul class="social-list">
           <li v-for="s in socialMedia" :key="s.platform">
             <strong>{{ s.platform }}:</strong>
             <a :href="s.url" target="_blank">{{ s.url }}</a>
-            <span v-if="s.followers">- Takipçi: {{ s.followers }}</span>
+            <span v-if="s.followers">- Follower: {{ s.followers }}</span>
           </li>
         </ul>
       </section>
 
       <!-- Yapay Zeka Analiz Tablosu -->
       <section class="ai-analysis-table" v-if="aiAnalysis && aiAnalysis.length">
-        <h3><span class="icon">🤖</span> Yapay Zeka Analizleri</h3>
+        <h3><span class="icon">🤖</span> Artificial Intelligence Analysis</h3>
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
-                <th>Kriter</th>
-                <th>Değer</th>
-                <th>Yorum</th>
+                <th>Criterion</th>
+                <th>Value</th>
+                <th>Comment</th>
               </tr>
             </thead>
             <tbody>
@@ -79,7 +79,7 @@
         </div>
       </section>
 
-     
+
 
     </div>
   </div>
@@ -88,6 +88,7 @@
 <script>
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import html2pdf from "html2pdf.js";
 
 export default {
   name: 'ReportResult',
@@ -105,29 +106,35 @@ export default {
       pdfLoading: false
     }
   },
-  methods: {
-    async downloadPDF() {
-      this.pdfLoading = true
-      document.body.style.cursor = 'wait'
-      try {
-        const el = this.$refs.pdfContent
-        el.classList.add('pdf-export')
-        await this.$nextTick()
-        const canvas = await html2canvas(el, { scale: 2 })
-        const imgData = canvas.toDataURL('image/png')
-        const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' })
-        const pageWidth = pdf.internal.pageSize.getWidth()
-        const imgWidth = pageWidth - 40
-        const imgHeight = canvas.height * imgWidth / canvas.width
-        pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight)
-        pdf.save(`${this.domain}.rapor.pdf`)
-      } finally {
-        el.classList.remove('pdf-export')
-        this.pdfLoading = false
-        document.body.style.cursor = ''
+
+    methods: {
+      async downloadPDF() {
+        this.pdfLoading = true;
+        document.body.style.cursor = 'wait';
+
+        try {
+          const el = this.$refs.pdfContent;
+
+          const opt = {
+            margin:       0.5,
+            filename:     `${this.domain}.rapor.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  {
+              scale: 2,
+              useCORS: true,
+              scrollY: 0,          // 🔥 Sayfa kaydırılsa da tüm içerik alınır
+            },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+          };
+
+          await html2pdf().set(opt).from(el).save();
+        } finally {
+          this.pdfLoading = false;
+          document.body.style.cursor = '';
+        }
       }
     }
-  }
 }
 </script>
 
@@ -138,7 +145,7 @@ export default {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 1rem;
-  
+
 }
 .pdf-btn {
   background: var(--accent);

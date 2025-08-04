@@ -2,7 +2,7 @@
   <div class="report-view">
     <div v-if="error" class="error-message">
       {{ error }}
-      <button class="back-btn" @click="goHome">Geri Dön</button>
+      <button class="back-btn" @click="goHome">Go back</button>
     </div>
 
     <div v-else-if="loaded" class="report-container">
@@ -60,6 +60,9 @@ export default {
             }
           }
         );
+        // Bu kod parçası, kullanıcıdan alınan 'domain' verisini, backend'de çalışmakta olan Flask API'ye POST isteği olarak gönderir.
+        // API, bu domain üzerinden gerekli verileri çekerek analiz eder ve frontend'e yanıt olarak geri döner.
+
 
         const data = response.data;
 
@@ -68,7 +71,7 @@ export default {
 
         this.loaded = true;
       } catch (err) {
-        this.error = "Veri alınırken hata oluştu.";
+        this.error = "An error occurred while retrieving data.";
         this.loaded = false;
       }
     },

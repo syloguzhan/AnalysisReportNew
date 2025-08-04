@@ -1,8 +1,8 @@
 <template>
   <div class="history-view">
     <div class="history-header">
-      <input class="history-search" v-model="search" placeholder="Geçmişte ara..." />
-      <button class="clear-btn" @click="clearAll" v-if="history.length">Tümünü Temizle</button>
+      <input class="history-search" v-model="search" placeholder="search in the past..." />
+      <button class="clear-btn" @click="clearAll" v-if="history.length">Clear All</button>
     </div>
     <div v-if="filteredHistory.length" class="history-list">
       <div v-for="(item, idx) in filteredHistory" :key="idx" class="history-card">
@@ -11,9 +11,9 @@
           <div class="history-date">{{ item.date }}</div>
         </div>
         <div class="history-card-actions">
-          <span class="status-tag" :class="statusClass(item.status)">{{ item.status || 'Başarılı' }}</span>
-          <button class="reanalyze-btn" @click="reanalyze(item.domain)">Tekrar Analiz Et</button>
-          <button class="delete-btn" @click="deleteItem(idx)">Sil</button>
+          <span class="status-tag" :class="statusClass(item.status)">{{ item.status || 'Successful' }}</span>
+          <button class="reanalyze-btn" @click="reanalyze(item.domain)">Analyze Again</button>
+          <button class="delete-btn" @click="deleteItem(idx)">Delete</button>
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
       <div class="empty-icon">
         <svg width="64" height="64" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#6ec1e4" stroke-width="2"/><path d="M8 12h8M8 16h8M8 8h8" stroke="#6ec1e4" stroke-width="2" stroke-linecap="round"/></svg>
       </div>
-      <div class="empty-text">Henüz geçmiş yok</div>
+      <div class="empty-text">There is no past yet</div>
     </div>
   </div>
 </template>
@@ -63,7 +63,7 @@ export default {
       localStorage.removeItem('domainHistory');
     },
     statusClass(status) {
-      if (!status || status === 'Başarılı') return 'status-success';
+      if (!status || status === 'Successful') return 'status-success';
       if (status === 'Hata') return 'status-error';
       return 'status-other';
     }
@@ -238,4 +238,4 @@ export default {
   font-size: 1.18rem;
   letter-spacing: 0.08em;
 }
-</style> 
+</style>

@@ -151,6 +151,7 @@ def retry_generate_content(prompt, retries=5, delay=3, section=None, domain=None
     logger.error(f" All {retries} attempts failed for section: {section} on domain: {domain}")
     return None
 
+
 def find_competitors_domain(domain):
     logger.info(f"Starting competitors domain scraping for domain : {domain}")
     prompt = f"""{domain} company's 5 major competitors' domain addresses.

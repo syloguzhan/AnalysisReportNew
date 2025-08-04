@@ -289,7 +289,8 @@ def generate_report():
         "main_domain": domain,
         "main_report": main_report,
         "competitors": competitors_report,
-        "comparison_table": comparison_table
+        "comparison_table": comparison_table,
+        "saved_at": datetime.utcnow().isoformat()
     }
 
     save_report_to_file(domain, result_data)

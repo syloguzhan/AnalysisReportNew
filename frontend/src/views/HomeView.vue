@@ -30,17 +30,6 @@
         </button>
       </form>
     </div>
-    <button class="help-btn" title="Yardım">
-      <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" stroke="#6ec1e4" stroke-width="2" />
-        <path
-          d="M12 16v-2m0-4a2 2 0 1 1 2 2c0 1-2 1-2 2"
-          stroke="#6ec1e4"
-          stroke-width="2"
-          stroke-linecap="round"
-        />
-      </svg>
-    </button>
   </div>
 </template>
 
@@ -76,7 +65,6 @@ export default {
 
       const sound = document.getElementById("clickSound");
       if (sound) sound.play();
-
 
       if ("vibrate" in navigator) {
         navigator.vibrate(100);

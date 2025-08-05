@@ -10,6 +10,9 @@
         :domain="domain"
         :mainReport="mainReport"
         :competitors="competitors"
+        :comparisonTable="comparisonTable"
+        :savedAt="savedAt"
+        @reanalyze="reanalyzeReport"
       />
     </div>
 
@@ -34,40 +37,35 @@ export default {
 
   data() {
     return {
-      mainReport: null,       // 👈 backend'ten gelen ana firma verisi
-      competitors: [],        // 👈 rakip firmalar
+      mainReport: null,
+      competitors: [],
+      comparisonTable: [],
+      savedAt: null,
       loaded: false,
       error: null,
     };
   },
 
   async created() {
-    console.log("Gelen domain:", this.domain);
-    await this.fetchReportData();
+    await this.fetchReportData(false);
   },
 
   methods: {
-    async fetchReportData() {
+    async fetchReportData(forceRefresh = false) {
       this.loaded = false;
       this.error = null;
       try {
         const response = await axios.post(
           "http://127.0.0.1:5000/generate-reports",
-          { domain: this.domain },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            }
-          }
+          { domain: this.domain, force_refresh: forceRefresh },
+          { headers: { "Content-Type": "application/json" } }
         );
-        // Bu kod parçası, kullanıcıdan alınan 'domain' verisini, backend'de çalışmakta olan Flask API'ye POST isteği olarak gönderir.
-        // API, bu domain üzerinden gerekli verileri çekerek analiz eder ve frontend'e yanıt olarak geri döner.
-
 
         const data = response.data;
-
         this.mainReport = data.main_report || {};
         this.competitors = data.competitors || [];
+        this.comparisonTable = data.comparison_table || [];
+        this.savedAt = data.saved_at || null;
 
         this.loaded = true;
       } catch (err) {
@@ -76,13 +74,16 @@ export default {
       }
     },
 
+    async reanalyzeReport() {
+      await this.fetchReportData(true);
+    },
+
     goHome() {
       this.$router.push({ name: "input" });
     },
   },
 };
 </script>
-
 
 <style scoped>
 .report-view {

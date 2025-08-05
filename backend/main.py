@@ -11,7 +11,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
-from datetime import datetime
+from datetime import datetime, timedelta
 from report_utils import load_report_if_recent, save_report_to_file
 from logger import logger
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -184,9 +184,20 @@ def analyze_section_for_domain(domain_name, text_content, section_title, section
 
 def generate_summary_for_table(domain, text, field_name):
     prompt = f"""
-    Summarize the following content about {domain} for the section "{field_name}" in a short and clear way (max 3 sentences):
+    Summarize the content about "{domain}" for the section "{field_name}" in a style suitable for a comparison matrix.
+    Rules:
+    - Maximum 20 words (1 short sentence only).
+    - Clear, objective, and concise.
+    - Focus on key facts or differentiators relevant to the section.
+    - Do NOT start with generic phrases like "The company" or "Based on the content."
+    - No extra commentary or explanations.
+
+    Content:
     {text}
+
+    Return ONLY the summary sentence.
     """
+
     logger.info(f"Generating summary for table field: {field_name} of {domain}")
     result = retry_generate_content(prompt, retries=5, delay=3, section=field_name, domain=domain)
     return result if result else "No data available"
@@ -285,12 +296,13 @@ def generate_report():
             summarized_fields["company"] = d["company"]
             comparison_table.append(summarized_fields)
 
+    turkey_time = datetime.utcnow() + timedelta(hours=3)
     result_data = {
         "main_domain": domain,
         "main_report": main_report,
         "competitors": competitors_report,
         "comparison_table": comparison_table,
-        "saved_at": datetime.utcnow().isoformat()
+        "saved_at": turkey_time.isoformat(),
     }
 
     save_report_to_file(domain, result_data)

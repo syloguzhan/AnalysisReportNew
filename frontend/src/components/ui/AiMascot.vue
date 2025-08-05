@@ -1,11 +1,8 @@
 <template>
   <div class="mascot-container">
-    <!-- Konuşma Balonu -->
     <div class="speech-bubble" v-if="showBubble">
       {{ bubbleMessage }}
     </div>
-
-    <!-- Robot ve Radar SVG -->
     <svg
       class="robot"
       width="200"
@@ -13,7 +10,6 @@
       viewBox="0 0 200 200"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <!-- Kafa -->
       <circle
         cx="100"
         cy="100"
@@ -23,7 +19,6 @@
         stroke-width="4"
       />
 
-      <!-- Gözler -->
       <circle
         class="eye left"
         :r="eyeBlink ? 2 : 6"
@@ -39,7 +34,6 @@
         fill="#fff"
       />
 
-      <!-- Ağız -->
       <path
         d="M75 120 Q100 140 125 120"
         stroke="#fff"
@@ -48,7 +42,6 @@
         stroke-linecap="round"
       />
 
-      <!-- Anten -->
       <line
         x1="100"
         y1="30"
@@ -60,7 +53,6 @@
       <circle cx="100" cy="10" r="6" :fill="antenColor" />
     </svg>
 
-    <!-- Aşamalı Yazılar -->
     <div class="status-box">
       <p class="loading-text">
         <span class="step-icon">{{ steps[currentStep].icon }}</span>
@@ -78,16 +70,16 @@ export default {
   data() {
     return {
       steps: [
-        { text: "Collecting data", icon: "🔍" }, // Veriler toplanıyor
-        { text: "Analyzing competitors", icon: "📊" }, // Rakip firmalar analiz ediliyor
-        { text: "Scanning social media", icon: "📱" }, // Sosyal medya taranıyor
-        { text: "AI is creating content", icon: "🧠" }, // Yapay zeka içerik oluşturuyor
-        { text: "Preparing the report", icon: "📄" }, // Rapor hazırlanıyor
-        { text: "Finalizing analysis", icon: "✅" }, // Son analiz tamamlanıyor
-        { text: "Formatting for output", icon: "📝" }, // Rapor çıktıya uygun hale getiriliyor
-        { text: "Optimizing insights", icon: "📌" }, // İçgörüler optimize ediliyor
-        { text: "Finishing touches", icon: "🎯" }, // Son rötuşlar yapılıyor
-        { text: "Ready to display!", icon: "🚀" }, // Görüntülemeye hazır!
+        { text: "Collecting data", icon: "🔍" },
+        { text: "Analyzing competitors", icon: "📊" },
+        { text: "Scanning social media", icon: "📱" },
+        { text: "AI is creating content", icon: "🧠" },
+        { text: "Preparing the report", icon: "📄" },
+        { text: "Finalizing analysis", icon: "✅" },
+        { text: "Formatting for output", icon: "📝" },
+        { text: "Optimizing insights", icon: "📌" },
+        { text: "Finishing touches", icon: "🎯" },
+        { text: "Ready to display!", icon: "🚀" },
       ],
       currentStep: 0,
       eyeBlink: false,
@@ -95,20 +87,20 @@ export default {
       showBubble: false,
       bubbleMessage: "",
       bubbleMessages: [
-        "Hi! Starting the analysis...", // Merhaba! Analize başlıyorum...
-        "Hmm... This domain looks interesting!", // Hmm... Bu domain ilginçmiş!
-        "AI is processing content!", // AI içerikleri işliyor!
-        "Almost there 😄", // Neredeyse hazır 😄
-        "Hold tight, I’m checking the social profiles!", // Beklemede kal, sosyal profilleri kontrol ediyorum!
-        "Data detected, organizing it for clarity...", // Veriler tespit edildi, düzenleniyor...
-        "This will only take a few more seconds ⏳", // Sadece birkaç saniye daha sürecek ⏳
-        "Searching for recent activity 📰", // Güncel etkinlikler araştırılıyor 📰
-        "Finding hidden insights 🔍", // Gizli içgörüler bulunuyor 🔍
-        "Evaluating trends and strategies...", // Trendler ve stratejiler değerlendiriliyor...
-        "Finalizing visual summary 📊", // Görsel özet tamamlanıyor 📊
-        "Writing up a smart summary ✍️", // Akıllı bir özet yazılıyor ✍️
-        "One moment... cleaning up the report!", // Bir saniye... rapor düzenleniyor!
-        "Almost done! Loading final output ⚙️", // Neredeyse bitti! Son çıktı yükleniyor ⚙️
+        "Hi! Starting the analysis...",
+        "Hmm... This domain looks interesting!",
+        "AI is processing content!",
+        "Almost there 😄",
+        "Hold tight, I’m checking the social profiles!",
+        "Data detected, organizing it for clarity...",
+        "This will only take a few more seconds ⏳",
+        "Searching for recent activity 📰",
+        "Finding hidden insights 🔍",
+        "Evaluating trends and strategies...",
+        "Finalizing visual summary 📊",
+        "Writing up a smart summary ✍️",
+        "One moment... cleaning up the report!",
+        "Almost done! Loading final output ⚙️",
       ],
     };
   },
@@ -117,7 +109,6 @@ export default {
   },
   methods: {
     startAnimations() {
-      // 👁 Göz kırpma animasyonu (3 saniyede bir)
       setInterval(() => {
         this.eyeBlink = true;
         setTimeout(() => {
@@ -125,12 +116,12 @@ export default {
         }, 180);
       }, 3000);
 
-      // 📡 Anten rengini değiştir (2 saniyede bir)
+
       setInterval(() => {
         this.antenColor = this.antenColor === "#e74c3c" ? "#2ecc71" : "#e74c3c";
       }, 2000);
 
-      // 💬 10 saniyede bir konuşma balonu göster (balon 10 saniye boyunca açık kalır)
+
       setInterval(() => {
         this.bubbleMessage =
           this.bubbleMessages[
@@ -138,13 +129,11 @@ export default {
           ];
         this.showBubble = true;
 
-        // 10 saniye sonra balonu kaldır
         setTimeout(() => {
           this.showBubble = false;
         }, 10000);
       }, 10000);
 
-      // ⏱️ Her 10 saniyede bir adımı değiştir
       setInterval(() => {
         if (this.currentStep < this.steps.length - 1) {
           this.currentStep++;
@@ -159,7 +148,7 @@ export default {
 .mascot-container {
   text-align: center;
   margin-top: 60px;
-  padding-top: 80px; /* 💬 Balona yer bırakmak için */
+  padding-top: 80px;
   animation: fadeIn 1s ease-in;
   position: relative;
 }
@@ -169,7 +158,7 @@ export default {
 }
 
 .status-box {
-  margin-top: -35px; /* 🔼 Daha yukarı taşıdık (önceden 20px'ti) */
+  margin-top: -35px;
   animation: fadeIn 1s ease-in;
 }
 
@@ -181,7 +170,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 4px; /* 🔽 Yazı ile noktalar arası boşluğu azalttık */
+  margin-bottom: 4px;
 }
 
 .step-icon {
@@ -192,7 +181,7 @@ export default {
 .dots {
   display: flex;
   justify-content: center;
-  margin-top: 4px; /* 🔽 Önceden 8px'ti, azaltıldı */
+  margin-top: 4px;
 }
 .dot {
   width: 10px;
@@ -218,7 +207,7 @@ export default {
 
 .speech-bubble {
   position: absolute;
-  top: -40px; /* 🧠 Robot kafasının üstüne yerleştirildi */
+  top: -40px;
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
@@ -229,7 +218,7 @@ export default {
   max-width: 240px;
   opacity: 1;
   transition: opacity 0.5s;
-  animation: fadeInOut 10s ease-in-out; /* 💬 10 saniyelik görünme süresi */
+  animation: fadeInOut 10s ease-in-out;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
